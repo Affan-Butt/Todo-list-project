@@ -1,11 +1,12 @@
 from typing import List
 
-from fastapi import APIRouter, Depends
+from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from Auth.auth_models import TodoCreate, TodoUpdate, TodoResponse
 from Database.db import get_db
 from Models.user_model import User
+from Models.todo_model import Todo
+from Auth.auth_models import TodoCreate, TodoUpdate, TodoResponse
 from Services.auth_service import get_current_user
 from Services.todo_service import (
     create_todo_service,
@@ -15,66 +16,55 @@ from Services.todo_service import (
     delete_todo_service,
 )
 
-router = APIRouter()
 
-
-@router.post("/", response_model=TodoResponse, status_code=201)
-async def create_todo(
+async def create_todo_handler(
     todo_data: TodoCreate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-):
-    return create_todo_service(db, todo_data, current_user.id)
+) -> TodoResponse:
+    todo = create_todo_service(db, todo_data, current_user.id)
+    return todo
 
 
-@router.get("/", response_model=List[TodoResponse])
-async def get_todos(
+async def get_todos_handler(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-):
+) -> List[TodoResponse]:
     return get_todos_service(db, current_user.id)
 
 
-@router.get("/{todo_id}", response_model=TodoResponse)
-async def get_todo(
+async def get_todo_handler(
     todo_id: int,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-):
+) -> TodoResponse:
     todo = get_todo_service(db, todo_id, current_user.id)
     if not todo:
-        from fastapi import HTTPException
-
         raise HTTPException(status_code=404, detail="Todo not found")
     return todo
 
 
-@router.put("/{todo_id}", response_model=TodoResponse)
-async def update_todo(
+async def update_todo_handler(
     todo_id: int,
     todo_data: TodoUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
-):
+) -> TodoResponse:
     todo = get_todo_service(db, todo_id, current_user.id)
     if not todo:
-        from fastapi import HTTPException
-
         raise HTTPException(status_code=404, detail="Todo not found")
 
-    return update_todo_service(db, todo, todo_data)
+    updated = update_todo_service(db, todo, todo_data)
+    return updated
 
 
-@router.delete("/{todo_id}")
-async def delete_todo(
+async def delete_todo_handler(
     todo_id: int,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     todo = get_todo_service(db, todo_id, current_user.id)
     if not todo:
-        from fastapi import HTTPException
-
         raise HTTPException(status_code=404, detail="Todo not found")
 
     delete_todo_service(db, todo)

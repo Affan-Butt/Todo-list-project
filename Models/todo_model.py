@@ -1,5 +1,7 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from Database.db import Base
+from sqlalchemy import create_engine  # Add this import if missing
+from sqlalchemy.orm import sessionmaker, declarative_base  # Add if missing
 
 
 class Todo(Base):

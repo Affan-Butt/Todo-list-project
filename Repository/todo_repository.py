@@ -4,8 +4,12 @@ from Models.todo_model import Todo
 
 
 def create_todo(db: Session, title: str, description: str | None, owner_id: int) -> Todo:
-    todo = Todo(title=title, description=description,
-                completed=False, owner_id=owner_id)
+    todo = Todo(
+        title=title,
+        description=description,
+        completed=False,
+        owner_id=owner_id
+    )
     db.add(todo)
     db.commit()
     db.refresh(todo)

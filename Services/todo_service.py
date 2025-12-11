@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from Auth.auth_models import TodoCreate, TodoUpdate
+from Schemas.todo_schema import TodoCreate, TodoUpdate        # << recommended import
 from Models.todo_model import Todo
 from Repository.todo_repository import (
     create_todo,

@@ -10,7 +10,7 @@ from Models.todo_model import Todo
 app = FastAPI(title="Todo JWT API with Postgres", version="1.0.0")
 
 app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
-app.include_router(todo_router, prefix="/todos", tags=["Todos"])
+app.include_router(todo_router, tags=["Todos"])
 
 
 @app.get("/")

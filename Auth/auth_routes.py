@@ -9,7 +9,6 @@ from Services.auth_service import verify_password, create_access_token
 
 router = APIRouter()
 
-
 @router.post("/register")
 async def register(
     user_data: UserCreate,

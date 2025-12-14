@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from Auth.auth_routes import router as auth_router
 from Routes.todo_routes import router as todo_router
 from Database.db import Base, engine
+from Middlewares import logging_middleware, jwt_logging_middleware
 
 # ✅ IMPORT MODELS AFTER Base/engine are ready
 from Models.user_model import User

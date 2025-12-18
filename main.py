@@ -4,11 +4,12 @@ from Routes.todo_routes import router as todo_router
 from Database.db import Base, engine
 from Middlewares import logging_middleware, jwt_logging_middleware
 
-# ✅ IMPORT MODELS AFTER Base/engine are ready
 from Models.user_model import User
 from Models.todo_model import Todo
 
 app = FastAPI(title="Todo JWT API with Postgres", version="1.0.0")
+
+app.middleware("http")(jwt_logging_middleware)
 
 app.include_router(auth_router, prefix="/auth", tags=["Authentication"])
 app.include_router(todo_router, tags=["Todos"])

@@ -17,8 +17,8 @@ async def create_todo_handler(todo_data: TodoCreate, current_user: User, db: Ses
     return create_todo_service(db, todo_data, current_user.id)
 
 
-async def get_todos_handler(current_user: User, db: Session) -> List[TodoResponse]:
-    return get_todos_service(db, current_user.id)
+async def get_todos_handler(current_user: User, db: Session, search: str | None = None) -> List[TodoResponse]:
+    return await get_todos_service(db, current_user.id, search)
 
 
 async def get_todo_handler(todo_id: int, current_user: User, db: Session) -> TodoResponse:

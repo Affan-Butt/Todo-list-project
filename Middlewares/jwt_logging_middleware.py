@@ -1,10 +1,9 @@
-# Middlewares/jwt_logging_middleware.py
+# jwt_logging_middleware
 from typing import Optional
 
 from fastapi import Request
 from jose import jwt, JWTError
 
-# Ye values tumhare auth_service / auth_routes ke barabar honi chahiye
 SECRET_KEY = "super_secret_key"
 ALGORITHM = "HS256"
 
@@ -22,12 +21,6 @@ def _get_bearer_token(request: Request) -> Optional[str]:
 
 
 async def jwt_logging_middleware(request: Request, call_next):
-    """
-    Har request ke liye:
-    - Authorization header se JWT token read karega
-    - Token decode karke 'sub' (email) nikaalega
-    - Console me user + path log karega
-    """
     token = _get_bearer_token(request)
     user_email: Optional[str] = None
 

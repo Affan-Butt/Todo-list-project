@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from Database.db import get_db
+from fastapi import Query
 from Models.user_model import User
 from Services.auth_service import get_current_user
 from Schemas.todo_schema import TodoCreate, TodoUpdate, TodoResponse
@@ -30,8 +31,9 @@ async def create_todo(
 async def get_todos(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
+    search: str | None = Query(None, description="Search in title or content"),
 ):
-    return await get_todos_handler(current_user, db)
+    return await get_todos_handler(current_user, db, search)
 
 
 @router.get("/{todo_id}", response_model=TodoResponse)

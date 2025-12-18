@@ -1,4 +1,3 @@
-# Middlewares/logging_middleware.py
 from fastapi import Request
 import time
 

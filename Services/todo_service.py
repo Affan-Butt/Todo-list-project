@@ -20,8 +20,9 @@ def create_todo_service(db: Session, todo_in: TodoCreate, user_id: int) -> Todo:
     )
 
 
-def get_todos_service(db: Session, user_id: int):
-    return list_todos_by_owner(db, owner_id=user_id)
+async def get_todos_service(db: Session, user_id: int, search: str | None = None) -> List[TodoResponse]:
+    # search pass
+    return await list_todos_by_owner(db, owner_id=user_id, search=search)
 
 
 def get_todo_service(db: Session, todo_id: int, user_id: int):
